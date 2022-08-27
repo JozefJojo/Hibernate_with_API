@@ -1,17 +1,19 @@
 package com.sda.cz5;
 
 import com.sda.cz5.dao.LocationDao;
+import com.sda.cz5.dao.LocationFactory;
 import com.sda.cz5.entity.Location;
 import com.sda.cz5.weatherapi.LocationClient;
 import com.sda.cz5.weatherapi.LocationModel;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class WeatherMain {
 
     LocationClient client = new LocationClient();
-    LocationDao locationDao;
+    LocationDao locationDao = LocationFactory.createLocationDao();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -35,6 +37,15 @@ public class WeatherMain {
         switch (commands[0]) {
             case "city-down" -> cityDown(commands[1]);
             case "store-city" -> storeCity(commands);
+            case "list-city" -> listCity();
+
+        }
+    }
+
+    private void listCity() {
+        List<Location> all = locationDao.findAll();
+        for (Location location: all) {
+            System.out.println(location);
         }
     }
 
