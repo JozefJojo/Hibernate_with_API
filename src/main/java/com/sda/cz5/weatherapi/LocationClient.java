@@ -9,8 +9,13 @@ public class LocationClient {
 
     private ObjectMapper objectMapper=new ObjectMapper();
 
-    public LocationModel[] getLocation(String cityName) throws IOException {
-        LocationModel[] locationModel = loadDataFromService(createLocationUrl(cityName), LocationModel[].class);
+    public LocationModel[] getLocation(String cityName)  {
+        LocationModel[] locationModel ;
+        try {
+            locationModel = loadDataFromService(createLocationUrl(cityName), LocationModel[].class);
+        } catch (IOException e) {
+            return new LocationModel[]{};
+        }
         return locationModel;
     }
 
@@ -23,4 +28,8 @@ public class LocationClient {
         return retrieveObject;
     }
 
+
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 }
