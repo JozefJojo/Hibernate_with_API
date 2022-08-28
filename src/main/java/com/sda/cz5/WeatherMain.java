@@ -33,13 +33,30 @@ public class WeatherMain {
     }
 
     private void runCommand(String line) throws Exception {
-        String[] commands = line.split(" ");
-        switch (commands[0]) {
-            case "city-down" -> cityDown(commands[1]);
-            case "store-city" -> storeCity(commands);
-            case "list-city" -> listCity();
-            case "switch-dao" -> switchDao(commands[1]);
+        try {
+            String[] commands = line.split(" ");
+            switch (commands[0]) {
+                case "city-down" -> cityDown(commands[1]);
+                case "store-city" -> storeCity(commands);
+                case "list-city" -> listCity();
+                case "switch-dao" -> switchDao(commands[1]);
+                case "help" ->help();
+                default -> {
+                    System.out.println("Unknown command "+line);
+                }
+            }
+        }catch(Exception e){
+            resolveException(e,line);
         }
+    }
+
+    private void help() {
+        System.out.println("city-down cityName - Download and print location of city name");
+    }
+
+    private void resolveException(Exception e, String line) {
+        System.out.println("Bad command format: "+line);
+        System.out.println("Try enter help");
     }
 
     private void switchDao(String command) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
