@@ -17,6 +17,10 @@ public class WeatherMain {
     LocationDao locationDao = LocationFactory.createLocationDao(false);
 
     public static void main(String[] args) {
+        String property = System.getProperty("hibernate-password");
+        if(property==null){
+            System.out.println("specify hibernate-password proberty (by settin VM option. i.e. -Dhibernate-password=password)");
+        }
         Scanner scanner = new Scanner(System.in);
         WeatherMain main = new WeatherMain();
 

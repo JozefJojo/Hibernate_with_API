@@ -26,6 +26,7 @@ public class LocationFactory {
     private static EntityManagerFactory createFactory(){
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .configure("hibernate.cfg.xml")
+                .applySetting("hibernate.connection.password",System.getProperty("hibernate-password"))
                 .build();
 
         Metadata metadata = new MetadataSources(serviceRegistry)
