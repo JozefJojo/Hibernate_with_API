@@ -19,6 +19,8 @@ public class LocationModel {
     private String country;
 
 
+
+
     // Getter Methods
 
     public String getName() {

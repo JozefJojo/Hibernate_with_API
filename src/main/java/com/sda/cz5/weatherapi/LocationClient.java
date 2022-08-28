@@ -15,7 +15,7 @@ public class LocationClient {
     }
 
     private String createLocationUrl(String city) {
-        return String.format("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=03dd01195e340291ca0d69409b18f659", city);
+        return String.format("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=10&appid=03dd01195e340291ca0d69409b18f659", city);
     }
 
     public <T> T loadDataFromService(String url, Class<T> clazz) throws IOException {
