@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class WeatherMain {
 
     LocationClient client = new LocationClient();
-    LocationDao locationDao = LocationFactory.createLocationDao();
+    LocationDao locationDao = LocationFactory.createLocationDao(false);
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -26,19 +26,29 @@ public class WeatherMain {
             }
             try {
                 main.runCommand(line);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void runCommand(String line) throws IOException {
+    private void runCommand(String line) throws Exception {
         String[] commands = line.split(" ");
         switch (commands[0]) {
             case "city-down" -> cityDown(commands[1]);
             case "store-city" -> storeCity(commands);
             case "list-city" -> listCity();
+            case "switch-dao" -> switchDao(commands[1]);
+        }
+    }
 
+    private void switchDao(String command) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        if ("m".equals(command)) {
+            locationDao = LocationFactory.createLocationDao(true);
+        }if("d".equals(command)){
+            locationDao = LocationFactory.createLocationDao(false);
+        }else{
+            locationDao = LocationFactory.createLocationDao(command);
         }
     }
 
@@ -53,6 +63,7 @@ public class WeatherMain {
         String cityName = commands[1];
         double lon = Double.parseDouble(commands[2]);
         double lat = Double.parseDouble(commands[3]);
+
         locationDao.saveLocation(Location.builder().
                 latitude(lat).
                 longitude(lon).
