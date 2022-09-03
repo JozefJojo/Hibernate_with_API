@@ -1,5 +1,5 @@
 
-package com.sda.cz5.forecast;
+package com.sda.cz5.weatherapi.forecast;
 
 import java.util.HashMap;
 import java.util.Map;

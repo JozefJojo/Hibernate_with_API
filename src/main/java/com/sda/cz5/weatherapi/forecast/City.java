@@ -1,13 +1,15 @@
 
-package com.sda.cz5.forecast;
+package com.sda.cz5.weatherapi.forecast;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.ToString;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class City {
 
     @JsonProperty("id")

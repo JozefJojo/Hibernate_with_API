@@ -3,17 +3,21 @@ package com.sda.cz5;
 import com.sda.cz5.dao.LocationDao;
 import com.sda.cz5.dao.LocationFactory;
 import com.sda.cz5.entity.Location;
-import com.sda.cz5.weatherapi.LocationClient;
-import com.sda.cz5.weatherapi.LocationModel;
+import com.sda.cz5.weatherapi.forecast.Forecast;
+import com.sda.cz5.weatherapi.location.ForecastClient;
+import com.sda.cz5.weatherapi.location.LocationClient;
+import com.sda.cz5.weatherapi.location.LocationModel;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class WeatherMain {
 
     LocationClient client = new LocationClient();
+    ForecastClient forecastClient = new ForecastClient();
     LocationDao locationDao = LocationFactory.createLocationDao(false);
 
     public static void main(String[] args) {
@@ -41,7 +45,7 @@ public class WeatherMain {
         try {
             String[] commands = line.split(" ");
             switch (commands[0]) {
-                case "city-down" -> {
+                case "down-city" -> {
                     LocationModel[] locationModels = cityDown(commands[1]);
                     for (LocationModel model : locationModels) {
                         System.out.println(model);
@@ -50,6 +54,14 @@ public class WeatherMain {
                 case "store-city" -> storeCity(commands);
                 case "list-city" -> listCity();
                 case "switch-dao" -> switchDao(commands[1]);
+                case "down-forecast" -> {
+                    Optional<Forecast> forecast = downForecast(commands);
+                    String s = forecast.toString();
+                    int chunkSize = 100;
+
+                    String[] chunks = s.split("(?<=\\G.{" + chunkSize + "})");
+                    System.out.print(String.join("\n",chunks));
+                }
                 case "help" -> help();
                 default -> {
                     System.out.println("Unknown command " + line);
@@ -58,6 +70,22 @@ public class WeatherMain {
         } catch (Exception e) {
             resolveException(e, line);
         }
+    }
+
+    private Optional<Forecast> downForecast(String[] commands) {
+        //down-forecast Orlova
+        //down-forecast lat lon
+        if (commands.length == 2) {
+            Optional<Location> city = locationDao.findByName(commands[1]);
+            if (city.isPresent()) {
+                return forecastClient.getForecast(city.get().getLatitude(), city.get().getLongitude());
+            } else {
+                return Optional.empty();
+            }
+        }if(commands.length==3){
+            return forecastClient.getForecast(commands[1],commands[2]);
+        }
+        return Optional.empty();
     }
 
     private void help() {
