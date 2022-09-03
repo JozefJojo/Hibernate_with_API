@@ -18,7 +18,7 @@ public class LocationClient {
         }
         return locationModel;
     }
-
+//https://api.openweathermap.org/data/2.5/forecast?lat=49.845943&lon=18.430927&appid=3670cdc2cac8a44b06a02c47179a4159
     private String createLocationUrl(String city) {
         return String.format("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=10&appid=03dd01195e340291ca0d69409b18f659", city);
     }
