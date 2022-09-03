@@ -18,8 +18,10 @@ public class Forecast {
 
     @JsonProperty("list")
     private List<ForecastItem> forecastItem = null;
-    @JsonProperty("city")
+
+    //no need specify explicit JsonProperty, name is same as name in json
     private City city;
+
 
 
 }
