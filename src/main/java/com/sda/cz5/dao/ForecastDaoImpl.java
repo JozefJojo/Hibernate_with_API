@@ -22,6 +22,9 @@ public class ForecastDaoImpl implements ForecastsDao {
 
     @Override
     public boolean cityForecastExists(CityForecast cityForecast) {
+        if(cityForecast==null){
+            return false;
+        }
         TypedQuery<Long> query = entityManager.createQuery("SELECT count(id) FROM CityForecast " +
                 "WHERE location.id=:locId AND dateTime=:dt", Long.class);
         query.setParameter("locId", cityForecast.getLocation().getId());
