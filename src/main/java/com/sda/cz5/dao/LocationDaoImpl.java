@@ -25,7 +25,7 @@ public class LocationDaoImpl implements LocationDao{
 
     @Override
     public Optional<Location> findByName(String name) {
-        TypedQuery<Location> query = entityManager.createQuery("FROM Location  WHERE cityName = :name", Location.class);
+        TypedQuery<Location> query = entityManager.createQuery("FROM Location  WHERE cityName like '%:name'", Location.class);
         query.setParameter("name",name);
         try {
             return Optional.of(query.getSingleResult());
