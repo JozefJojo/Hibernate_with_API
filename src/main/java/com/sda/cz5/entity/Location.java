@@ -2,11 +2,16 @@ package com.sda.cz5.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +30,6 @@ public class Location extends BaseEntity {
     @Column(nullable = false)
     private String cityName;
 
-
+    @OneToMany(mappedBy="location")
+    private List<CityForecast> forecasts;
 }

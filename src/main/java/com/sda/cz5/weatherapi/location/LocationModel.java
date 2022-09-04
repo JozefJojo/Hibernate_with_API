@@ -1,4 +1,4 @@
-package com.sda.cz5.weatherapi;
+package com.sda.cz5.weatherapi.location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,6 +1,6 @@
 package com.sda.cz5;
 
-import com.sda.cz5.weatherapi.LocationModel;
+import com.sda.cz5.weatherapi.location.LocationModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
