@@ -1,7 +1,7 @@
 package com.sda.cz5;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sda.cz5.forecast.Forecast;
+import com.sda.cz5.weatherapi.forecast.Forecast;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 

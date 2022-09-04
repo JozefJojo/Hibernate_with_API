@@ -1,9 +1,8 @@
 package com.sda.cz5;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sda.cz5.entity.Location;
-import com.sda.cz5.weatherapi.LocationClient;
-import com.sda.cz5.weatherapi.LocationModel;
+import com.sda.cz5.weatherapi.location.LocationClient;
+import com.sda.cz5.weatherapi.location.LocationModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

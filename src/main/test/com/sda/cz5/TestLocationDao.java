@@ -1,6 +1,5 @@
 package com.sda.cz5;
 
-import com.sda.cz5.dao.LocationDao;
 import com.sda.cz5.dao.LocationDaoImpl;
 import com.sda.cz5.entity.Location;
 import jakarta.persistence.EntityManager;
@@ -36,7 +35,7 @@ public class TestLocationDao {
                 .build();
 
         // when
-        locationDao.saveLocation(location);
+        locationDao.saveObject(location);
 
         // then
         Assertions.assertNotNull(location.getId());
