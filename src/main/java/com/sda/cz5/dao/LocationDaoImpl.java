@@ -8,7 +8,7 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-public class LocationDaoImpl implements LocationDao {
+public class LocationDaoImpl implements LocationDao{
 
     private EntityManager entityManager ;
 
@@ -16,20 +16,6 @@ public class LocationDaoImpl implements LocationDao {
         this.entityManager = entityManager;
     }
 
-    @Override
-    public void saveLocation(Location location) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        if(!transaction.isActive()){
-            transaction.begin();
-        }
-        try {
-            entityManager.persist(location);
-        }catch (Exception e){
-            transaction.rollback();
-        }
-        transaction.commit();
-
-    }
 
     @Override
     public List<Location> findAll() {
@@ -47,5 +33,10 @@ public class LocationDaoImpl implements LocationDao {
             return Optional.empty();
         }
 
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }

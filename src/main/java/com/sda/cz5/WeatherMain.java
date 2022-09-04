@@ -1,9 +1,13 @@
 package com.sda.cz5;
 
+import com.sda.cz5.dao.ForecastsDao;
 import com.sda.cz5.dao.LocationDao;
 import com.sda.cz5.dao.LocationFactory;
+import com.sda.cz5.entity.CityForecast;
+import com.sda.cz5.entity.EntityModelMapper;
 import com.sda.cz5.entity.Location;
 import com.sda.cz5.weatherapi.forecast.Forecast;
+import com.sda.cz5.weatherapi.forecast.ForecastItem;
 import com.sda.cz5.weatherapi.location.ForecastClient;
 import com.sda.cz5.weatherapi.location.LocationClient;
 import com.sda.cz5.weatherapi.location.LocationModel;
@@ -19,6 +23,7 @@ public class WeatherMain {
     LocationClient client = new LocationClient();
     ForecastClient forecastClient = new ForecastClient();
     LocationDao locationDao = LocationFactory.createLocationDao(false);
+    ForecastsDao forecastsDao=null;
 
     public static void main(String[] args) {
         String property = System.getProperty("hibernate-password");
@@ -60,8 +65,9 @@ public class WeatherMain {
                     int chunkSize = 100;
 
                     String[] chunks = s.split("(?<=\\G.{" + chunkSize + "})");
-                    System.out.print(String.join("\n",chunks));
+                    System.out.print(String.join("\n", chunks));
                 }
+                case "store-forecast" -> storeForecast(commands[1]);
                 case "help" -> help();
                 default -> {
                     System.out.println("Unknown command " + line);
@@ -69,6 +75,37 @@ public class WeatherMain {
             }
         } catch (Exception e) {
             resolveException(e, line);
+        }
+    }
+
+    private void storeForecast(String city) {
+        Optional<Location> cityLocation = locationDao.findByName(city);
+        int forecastStoredCount=0;
+        if (cityLocation.isPresent()) {
+            Location location = cityLocation.get();
+            //stazeni informaci o pocasi z WS( Webove sluzby)
+            Optional<Forecast> forecast = forecastClient.getForecast(location.getLatitude(), location.getLongitude());
+            if (forecast.isPresent()) {
+                List<ForecastItem> forecastItem = forecast.get().getForecastItem();
+                //pro kazdou polozku predpovedi ji ulozime do DB jestlize uz v DB neni
+                for (ForecastItem item : forecastItem) {
+                    //predpoved stazena z WS je ForecastItem (puvodni JSON)
+                    //DB pracuje s entitou CityForecast (zjednoduseny objekt, nepotrebujeme vse)
+                    //proto prevedeme pomoci metody EntityModelMapper.getFromModel...
+                    //na Entitu
+                    CityForecast cityForecast = EntityModelMapper.getFromModel(item,location);
+                    //ulozime pouze pokud neexistuje predpoved pro dane datum
+                    if(!forecastsDao.cityForecastExists(cityForecast)) {
+                        forecastsDao.addCityForecast(cityForecast);
+                        forecastStoredCount++;
+                    }
+                }
+                System.out.printf("Stored %s forecastes for city: %s\n",forecastStoredCount,location.getCityName());
+            } else {
+                System.out.println("Cannot read forecast from api");
+            }
+        } else {
+            System.out.printf("City: %s not found. Run store-city first\n");
         }
     }
 
@@ -135,7 +172,7 @@ public class WeatherMain {
                 return;
             }
         }
-        locationDao.saveLocation(Location.builder().
+        locationDao.saveObject(Location.builder().
                 latitude(lat).
                 longitude(lon).
                 cityName(cityName).

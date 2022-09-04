@@ -1,6 +1,7 @@
 package com.sda.cz5.dao;
 
 import com.sda.cz5.entity.Location;
+import jakarta.persistence.EntityManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,9 +10,15 @@ import java.util.Optional;
 
 public class LocationDaoMemory implements LocationDao{
     private List<Location> inner=new ArrayList<>();
+
     @Override
-    public void saveLocation(Location location) {
-        inner.add(location);
+    public EntityManager getEntityManager() {
+        return null;
+    }
+
+    @Override
+    public void saveObject(Location object) {
+        inner.add(object);
     }
 
     @Override
