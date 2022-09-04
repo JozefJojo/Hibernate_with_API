@@ -15,7 +15,7 @@ public class EntityModelMapper {
         cityForecast.setWindSpeed(item.getWind().getSpeed());
         cityForecast.setWindDirection(CityForecast.WindDirection.fromDegerees(item.getWind().getDeg()));
         //2022-09-03 09:00:00
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:MM");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(item.getDtTxt(), formatter);
         cityForecast.setDateTime(dateTime);
         return cityForecast;

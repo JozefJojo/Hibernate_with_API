@@ -29,6 +29,9 @@ public class CityForecast extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private WindDirection windDirection;
 
+    public double getTempCelsius(){
+        return temp-273.15;
+    }
     public enum WindDirection{
         N,
         S,

@@ -1,5 +1,6 @@
 package com.sda.cz5;
 
+import com.sda.cz5.dao.ForecastFactory;
 import com.sda.cz5.dao.ForecastsDao;
 import com.sda.cz5.dao.LocationDao;
 import com.sda.cz5.dao.LocationFactory;
@@ -8,7 +9,7 @@ import com.sda.cz5.entity.EntityModelMapper;
 import com.sda.cz5.entity.Location;
 import com.sda.cz5.weatherapi.forecast.Forecast;
 import com.sda.cz5.weatherapi.forecast.ForecastItem;
-import com.sda.cz5.weatherapi.location.ForecastClient;
+import com.sda.cz5.weatherapi.forecast.ForecastClient;
 import com.sda.cz5.weatherapi.location.LocationClient;
 import com.sda.cz5.weatherapi.location.LocationModel;
 
@@ -23,7 +24,7 @@ public class WeatherMain {
     LocationClient client = new LocationClient();
     ForecastClient forecastClient = new ForecastClient();
     LocationDao locationDao = LocationFactory.createLocationDao(false);
-    ForecastsDao forecastsDao=null;
+    ForecastsDao forecastsDao= ForecastFactory.createForecastDao();
 
     public static void main(String[] args) {
         String property = System.getProperty("hibernate-password");

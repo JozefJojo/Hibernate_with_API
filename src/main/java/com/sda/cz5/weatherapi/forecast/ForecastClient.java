@@ -1,7 +1,7 @@
-package com.sda.cz5.weatherapi.location;
+package com.sda.cz5.weatherapi.forecast;
 
 
-import com.sda.cz5.weatherapi.forecast.Forecast;
+import com.sda.cz5.weatherapi.AbstractLocationClient;
 
 import java.io.IOException;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.sda.cz5.weatherapi.location;
+package com.sda.cz5.weatherapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

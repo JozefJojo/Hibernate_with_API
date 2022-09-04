@@ -1,9 +1,9 @@
 package com.sda.cz5.weatherapi.location;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sda.cz5.weatherapi.AbstractLocationClient;
+
 import java.io.IOException;
-import java.net.URI;
 
 public class LocationClient extends AbstractLocationClient {
 
