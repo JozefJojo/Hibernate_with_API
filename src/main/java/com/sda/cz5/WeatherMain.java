@@ -14,10 +14,11 @@ import com.sda.cz5.weatherapi.location.LocationClient;
 import com.sda.cz5.weatherapi.location.LocationModel;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.ToDoubleFunction;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class WeatherMain {
 
@@ -69,6 +70,7 @@ public class WeatherMain {
                     System.out.print(String.join("\n", chunks));
                 }
                 case "store-forecast" -> storeForecast(commands[1]);
+                case "stat" -> printStatistic(commands);
                 case "help" -> help();
                 default -> {
                     System.out.println("Unknown command " + line);
@@ -79,9 +81,67 @@ public class WeatherMain {
         }
     }
 
+    private void printStatistic(String[] commands) {
+        try {
+            String city = commands[1];
+            String statType = commands[2];//temp|hum|wind
+            int historyInHours = Integer.parseInt(commands[3]);
+            List<CityForecast> allForCityName = forecastsDao.getAllForCityName(city);
+            switch (statType) {
+                case "temp" -> printAvgTemp(allForCityName, historyInHours);
+                case "hum" -> printAvgHum(allForCityName,historyInHours);
+                case "wind" -> printAvgWind(allForCityName,historyInHours);
+            }
+        } catch (Exception ex) {
+            resolveException(ex, String.join(" ", commands));
+            ex.printStackTrace();
+        }
+    }
+
+    private void printAvgWind(List<CityForecast> allForCityName, int futureInHours) {
+        printAvgValue(allForCityName,
+                futureInHours,
+                CityForecast::getWindSpeed,
+                "Avg wind speed for next %s hours for city:%s is %.2f ");
+    }
+
+    private void printAvgHum(List<CityForecast> allForCityName, int futureInHours) {
+        printAvgValue(allForCityName,
+                futureInHours,
+                CityForecast::getHumidity,
+                "Avg humidity for next %s hours for city:%s is %.2f %%");
+    }
+
+    private void printAvgTemp(List<CityForecast> allForCityName, int futureInHours) {
+        printAvgValue(allForCityName,
+                futureInHours,
+                CityForecast::getTempCelsius,
+                "Avg temperature for next %s hours for city:%s is %.2f celsius");
+    }
+
+    private void printAvgValue(List<CityForecast> allForCityName, int futureInHours,
+                               ToDoubleFunction<CityForecast> function,String message) {
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime futureTime = localDateTime.plusHours(futureInHours);
+
+
+        OptionalDouble average = allForCityName.stream()
+                .filter(cityForecast -> cityForecast.getDateTime().isBefore(futureTime))
+                .mapToDouble(function)
+                .average();
+
+        if(average.isPresent()){
+            System.out.println(String.format(
+                    message
+                    ,futureInHours,"?",average.getAsDouble()));
+        }
+
+    }
+
     private void storeForecast(String city) {
         Optional<Location> cityLocation = locationDao.findByName(city);
-        int forecastStoredCount=0;
+        int forecastStoredCount = 0;
         if (cityLocation.isPresent()) {
             Location location = cityLocation.get();
             //stazeni informaci o pocasi z WS( Webove sluzby)
